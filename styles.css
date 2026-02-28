@@ -37,7 +37,15 @@ h2 {
 
 .tagline {
   color: #888;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+.bio {
+  color: #777;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 480px;
 }
 
 .links {
