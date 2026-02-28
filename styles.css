@@ -1,0 +1,135 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0a0a0a;
+  color: #e5e5e5;
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: lowercase;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+.tagline {
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.links {
+  margin-bottom: 24px;
+}
+
+.links a {
+  color: #e5e5e5;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.links a:hover {
+  color: #fff;
+  border-color: #666;
+}
+
+.sep {
+  color: #444;
+  margin: 0 8px;
+}
+
+.entry {
+  margin-bottom: 16px;
+}
+
+.entry a {
+  color: #e5e5e5;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.entry a:hover {
+  color: #fff;
+  border-color: #666;
+}
+
+.meta {
+  color: #666;
+}
+
+.desc {
+  color: #888;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #e5e5e5;
+}
+
+.projects-list {
+  margin-top: 24px;
+}
+
+.view-more {
+  display: inline-block;
+  margin-top: 8px;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.view-more:hover {
+  color: #e5e5e5;
+}
+
+.callout {
+  margin-top: 48px;
+  padding: 20px;
+  background: #111;
+  border-radius: 8px;
+  color: #999;
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 48px 20px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+}
