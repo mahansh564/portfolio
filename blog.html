@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog — Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Writing by Anshul Mahajan on engineering, startups, robotics, and building systems at scale."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://anshulmaha.com/blog" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://anshulmaha.com/blog" />
+    <meta property="og:title" content="Blog — Anshul Mahajan" />
+    <meta
+      property="og:description"
+      content="Writing by Anshul Mahajan on engineering, startups, robotics, and building systems at scale."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-link">← back</a>
+
+      <h1>blog</h1>
+      <p class="tagline">thoughts on engineering, startups, and building things</p>
+
+      <!--
+        Collections: grouped series of posts.
+        To add a new collection:
+          1. Create blog/collections/your-collection-slug.html
+          2. Add a section below with collection link + its posts
+          3. Tag each post with collection-label linking back to the collection page
+      -->
+
+      <section class="blog-collection">
+        <div class="blog-collection-header">
+          <a
+            href="blog/collections/summer-robotics-challenge.html"
+            class="blog-collection-title"
+            >summer robotics challenge</a
+          >
+          <p class="blog-collection-description">
+            weekly build log · jun – sep 2026 · embodied ai on the xlerobot
+          </p>
+        </div>
+
+        <div class="blog-list">
+          <article class="blog-card">
+            <a href="blog/summer-robotics-week-0.html" class="blog-card-title"
+              >week 0 — it's a hot bot summer</a
+            >
+            <p class="blog-card-excerpt">
+              kickoff day in otaniemi — hardware handoff, the challenge ahead,
+              and committing to twelve weeks of writing.
+            </p>
+            <div class="post-meta">
+              <span class="post-date">13 jun 2026</span>
+              <span class="post-reading-time">5 min read</span>
+              <span class="tag">week 0</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="blog-collection">
+        <div class="blog-collection-header">
+          <span class="blog-collection-title blog-collection-title--static">standalone</span>
+          <p class="blog-collection-description">one-off posts</p>
+        </div>
+
+        <div class="blog-list">
+          <article class="blog-card">
+            <a href="blog/the-building-begins-again.html" class="blog-card-title"
+              >the building begins again</a
+            >
+            <p class="blog-card-excerpt">
+              stepping into the role of cto at slush — from lego bricks in new
+              delhi to building foundations where thousands of others can create
+              what comes next.
+            </p>
+            <div class="post-meta">
+              <span class="post-date">14 jun 2026</span>
+              <span class="post-reading-time">4 min read</span>
+              <span class="tag">career</span>
+              <span class="tag">slush</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

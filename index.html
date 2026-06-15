@@ -98,6 +98,8 @@
           rel="noopener noreferrer"
           >github</a
         >
+        <span class="sep">/</span>
+        <a href="blog.html">blog</a>
       </div>
 
       <h2>(cool) things i've done</h2>
@@ -234,7 +236,130 @@
         <a href="projects.html">view more</a>
       </div>
 
-      
+      <h2>writing</h2>
+
+      <div class="blog-list">
+        <article class="blog-card">
+          <a href="blog/summer-robotics-week-0.html" class="blog-card-title"
+            >week 0 — it's a hot bot summer</a
+          >
+          <p class="blog-card-excerpt">
+            kickoff for the summer robotics challenge — three months of embodied
+            ai, a weekly build log starting in otaniemi.
+          </p>
+          <div class="post-meta">
+            <span class="post-date">13 jun 2026</span>
+            <span class="tag">robotics</span>
+          </div>
+        </article>
+
+        <article class="blog-card">
+          <a href="blog/the-building-begins-again.html" class="blog-card-title"
+            >the building begins again</a
+          >
+          <p class="blog-card-excerpt">
+            stepping into the role of cto at slush — from lego bricks in new
+            delhi to building foundations for what comes next.
+          </p>
+          <div class="post-meta">
+            <span class="post-date">14 jun 2026</span>
+            <span class="tag">career</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="view-more">
+        <a href="blog.html">view all</a>
+      </div>
     </div>
+
+    <div class="blog-portal" id="blogPortal" aria-hidden="true">
+      <div class="blog-portal-scanlines"></div>
+      <p class="blog-portal-text">opening blog<span class="blog-portal-dots"></span></p>
+    </div>
+
+    <button
+      type="button"
+      class="blog-terminal"
+      id="blogTerminal"
+      aria-label='Type "blog" anywhere on this page, or click here to open the blog'
+    >
+      <span class="blog-terminal-label">~</span>
+      <span class="blog-terminal-buffer" id="terminalBuffer"></span>
+      <span class="blog-terminal-cursor" aria-hidden="true">█</span>
+      <span class="blog-terminal-hint" id="terminalHint">type "blog"</span>
+    </button>
+
+    <script>
+      (function () {
+        var target = "blog";
+        var buffer = "";
+        var terminal = document.getElementById("blogTerminal");
+        var bufferEl = document.getElementById("terminalBuffer");
+        var hintEl = document.getElementById("terminalHint");
+        var portal = document.getElementById("blogPortal");
+        var navigating = false;
+        var hints = ["type \"blog\"", "or click me", "i write sometimes"];
+
+        function renderBuffer() {
+          bufferEl.textContent = buffer;
+          hintEl.style.opacity = buffer ? "0" : "1";
+        }
+
+        function navigateToBlog() {
+          if (navigating) return;
+          navigating = true;
+          document.body.classList.add("blog-portal-active");
+          portal.setAttribute("aria-hidden", "false");
+          setTimeout(function () {
+            window.location.href = "blog.html";
+          }, 900);
+        }
+
+        function resetBuffer() {
+          buffer = "";
+          renderBuffer();
+        }
+
+        document.addEventListener("keydown", function (e) {
+          if (navigating) return;
+          if (e.metaKey || e.ctrlKey || e.altKey) return;
+          if (e.key === "Escape") {
+            resetBuffer();
+            return;
+          }
+          if (e.key === "Backspace") {
+            buffer = buffer.slice(0, -1);
+            renderBuffer();
+            return;
+          }
+          if (e.key.length !== 1) return;
+
+          var char = e.key.toLowerCase();
+          if (!/[a-z]/.test(char)) return;
+
+          e.preventDefault();
+          buffer = (buffer + char).slice(-target.length);
+
+          if (buffer === target) {
+            bufferEl.textContent = buffer;
+            terminal.classList.add("blog-terminal-success");
+            navigateToBlog();
+            return;
+          }
+
+          renderBuffer();
+        });
+
+        terminal.addEventListener("click", navigateToBlog);
+
+        var hintIndex = 0;
+        setInterval(function () {
+          if (buffer || navigating) return;
+          hintIndex = (hintIndex + 1) % hints.length;
+          hintEl.textContent = hints[hintIndex];
+        }, 3200);
+      })();
+    </script>
   </body>
 </html>

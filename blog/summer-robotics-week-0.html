@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 0: It's a Hot Bot Summer | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Kickoff day for the Summer Robotics Challenge: three months, an XLerobot, and a weekly build log starting June 13 in Otaniemi."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-0"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-0"
+    />
+    <meta
+      property="og:title"
+      content="Week 0: It's a Hot Bot Summer | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Kickoff day for the Summer Robotics Challenge: three months, an XLerobot, and a weekly build log starting June 13."
+    />
+    <meta property="article:published_time" content="2026-06-13" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 0: It's a Hot Bot Summer",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-06-15",
+        "description": "Kickoff day for the Summer Robotics Challenge: three months, an XLerobot, and a weekly build log starting June 13 in Otaniemi.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-0",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 0
+        </p>
+        <h1>it's a hot bot summer</h1>
+        <div class="post-meta">
+          <span class="post-date">15 jun 2026</span>
+          <span class="post-reading-time">5 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 0</span>
+        </div>
+      </header>
+
+      <article class="article">
+        <p>
+          Kickoff day for the
+          <a
+            href="https://luma.com/yyushsqi?tk=kgjRGP"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Summer Robotics Challenge</a
+          >: three months to build something with embodied AI.
+          <a href="https://www.roboticsnation.org/" target="_blank" rel="noopener noreferrer">Robotics Nation</a> is running it.
+        </p>
+
+        <p>
+          They opened with a question: what would you do if you had your own
+          embodied AI assistant for the whole summer? Simple to ask. Harder to
+          answer.
+        </p>
+
+        <p>
+          "Hot bot summer" works on a few levels for me. It's the meme. It's
+          literally summer. And at some point the Jetson on my bench is going to
+          run hot too.
+        </p>
+
+        <p>
+          This isn't a weekend hackathon or a stage demo that falls apart the
+          second you unplug something. It's twelve weeks to break things, rebuild
+          them, and land on an MVP that a real person might pay for.
+        </p>
+
+        <h2>the deal</h2>
+
+        <p>
+          Each team gets an
+          <a
+            href="https://xlerobot.readthedocs.io/en/latest/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >XLerobot</a
+          >
+          kit: open-source hardware, OAK-D depth camera, Meta Quest 3S, Jetson
+          Orin Nano. About €1,500 of parts.
+        </p>
+
+        <p>
+          There's also a €7,000 prize pool. Demo day is September 13, and the
+          top teams get to show at Robotgames in late October.
+        </p>
+
+        <p>
+          Teams can be one to five people. I'm going solo. Not because I
+          couldn't find anyone, but because I want my hands on every part of
+          it: the wiring, the models, the bits that break at 1am. If I'm going
+          to relearn this from scratch, I don't want to be able to hide behind
+          someone who already gets it.
+        </p>
+
+        <h2>why this, why now</h2>
+
+        <p>
+          I haven't competed in robotics since RoboCup Junior 2017. Three
+          national finals in India, a trip to Japan to represent the country.
+          Before that it was LEGO Mindstorms in 2015, then a ROS 2 project in
+          2022. Everything since has been software: startups, Slush, things
+          scaling to tens of thousands of users.
+        </p>
+
+        <p>
+          So I'm rusty, and I've decided that's fine. Coming back now, the field
+          barely looks the same. The robot used to be the hard part. You wrote
+          the logic by hand and the machine did exactly what you told it,
+          mistakes included. Now a lot of the intelligence lives in the models:
+          big VLA systems that look at a scene and decide
+          what to do, more like steering something that already has opinions
+          than programming a state machine. I learned on color sensors and
+          open-loop turns, so this is a different way of thinking
+          about control. I'm not going to out-read the people who've lived in
+          this for years, so the plan is to learn by building: read enough of
+          the key work to know what's possible, then get my hands on the bot and
+          find out where my mental model is wrong. Fresh eyes might be the only
+          edge I've got.
+        </p>
+
+        <p>
+          But I've never really left building. LEGO on the floor in New Delhi. A
+          research assistant gig at Aalto on a robotic arm. Same itch as when I
+          was a kid stacking blocks to see if they'd hold.
+        </p>
+
+        <p>
+          Embodied AI feels like the obvious place to pick that back up. Code in
+          a physical body has to deal with actual space and actual objects. It
+          fails in ways a browser tab never will, which sounds more fun than
+          another dashboard at this point.
+        </p>
+
+        <h2>the plan</h2>
+
+        <p>
+          I'm going to post here every week for the next twelve. What I tried,
+          what broke, what I'd redo. The stuff that doesn't end up in the demo
+          reel.
+        </p>
+
+        <p>A few dates:</p>
+
+        <ul>
+          <li>13 June: kickoff and hardware handoff (today)</li>
+          <li>13 September: demo day in Otaniemi</li>
+          <li>30 Oct to 1 Nov: Robotgames for top teams</li>
+        </ul>
+
+        <p>
+          I still haven't picked the MVP. Grab something from the fridge? Fold
+          laundry? Water plants while you're away? It needs to be boring enough
+          that someone would pay for it and weird enough that building it
+          actually teaches me something.
+        </p>
+
+        <h2>week 0</h2>
+
+        <p>
+          Today was mostly logistics: meet the other teams, poke at the
+          XLerobot, try to figure out what "three months" feels like when the
+          hardware is actually in your hands.
+        </p>
+
+        <p>
+          Small group, and everyone was keen in that slightly nervous way you
+          get on day one, before anyone has anything to show. No bravado yet.
+          Just a room of people who'd signed up to spend their summer on this.
+        </p>
+
+        <p>
+          The hardware made it real. Picking up the XLerobot, plugging in the
+          Jetson, looking at the OAK-D and the Quest sitting there waiting. I'm
+          genuinely excited to break it. Not carefully. I want to push it until
+          something gives, because that's usually where the interesting problems
+          are.
+        </p>
+
+        <p>
+          No breakthroughs. Just week 0. But I haven't started something in a
+          while without knowing how I'll finish it, and I kind of missed that
+          feeling.
+        </p>
+
+        <p>See you next week.</p>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
