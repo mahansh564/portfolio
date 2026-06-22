@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 1: No Display, No Problem | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 1 of the Summer Robotics Challenge: SSH into a headless Jetson, split the video stack, find the example code is broken, and fix it with a CPU vs GPU experiment."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-1"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-1"
+    />
+    <meta
+      property="og:title"
+      content="Week 1: No Display, No Problem | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 1 of the Summer Robotics Challenge: headless Jetson, split video stack, broken example code, and one CPU vs GPU experiment."
+    />
+    <meta property="article:published_time" content="2026-06-22" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 1: No Display, No Problem",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-06-22",
+        "description": "Week 1 of the Summer Robotics Challenge: SSH into a headless Jetson, split the video stack, find the example code is broken, and fix it with a CPU vs GPU experiment.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-1",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 1
+        </p>
+        <h1>no display, no problem</h1>
+        <div class="post-meta">
+          <span class="post-date">22 jun 2026</span>
+          <span class="post-reading-time">6 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 1</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <p>
+          Week 1 was supposed to be about getting the XLerobot moving. Instead
+          it was cables, SSH sessions, and a camera feed that would not show up
+          on my laptop.
+        </p>
+
+        <p>
+          I'm a builder by reflex. This summer I'm trying to read more anyway,
+          so I front-loaded the week with that, then spent the rest turning a
+          box of parts into something I could trust on the bench.
+        </p>
+
+        <h2>reading my way in</h2>
+
+        <p>
+          Before I touched the hardware again, I wanted a clearer picture of
+          where embodied AI actually is right now. Not the Twitter version.
+          More like: what do people think the stack looks like in 2026?
+        </p>
+
+        <p>
+          That meant world models. LeCun's been arguing for years that useful
+          physical intelligence runs through internal simulators, not bigger
+          chatbots. Predict in representation space, plan with a model, act in
+          the real world. I rewatched his JEPA lecture, then followed the thread
+          to V-JEPA 2 and Meta's claims about zero-shot robot planning from
+          video.
+        </p>
+
+        <p>
+          On paper it's compelling. A model that learns physics-ish structure
+          from watching the world, then needs only a small amount of robot data
+          to start planning actions. Makes you wonder if you'll have to
+          hand-write every control loop this summer.
+        </p>
+
+        <p>
+          I also went through the LeRobot docs, Physical Intelligence's writeup
+          on π0, SmolVLA, OpenVLA, Diffusion Policy, and a TensorRT guide for
+          YOLO on Jetson. Tooling for getting policies onto real hardware,
+          frontier VLAs that already look like products, inference tricks for
+          when a demo has to run at control-loop speed. Useful context before
+          breaking things on my own bench.
+        </p>
+
+        <p>
+          In week 0 I called fresh eyes my only real edge. They go stale fast
+          if you don't feed them. Naive questions only help once you know enough
+          to tell which ones are actually naive. The reading isn't me abandoning
+          the builder instinct. It's sharpening the one advantage I've got.
+          Full list at the bottom. I'll keep doing this each week so future-me
+          can trace what shaped the thinking.
+        </p>
+
+        <h2>ssh, no screen</h2>
+
+        <p>
+          Then the hardware remembered it exists.
+        </p>
+
+        <p>
+          Most of the week was setup: wiring, calibration, getting the Jetson to
+          boot cleanly, making sure the arms move. I landed on SSH from my
+          laptop into the Jetson on the bench. Convenient, except the Jetson had
+          no display attached.
+        </p>
+
+        <p>
+          That sounds like a small detail until you try to run the example
+          scripts. Anything that opens a window (<code>cv2.imshow</code>, a
+          live preview, an annotated feed) dies immediately over SSH with no
+          X server and no monitor. The process runs, the camera captures, and
+          then nothing renders. Or worse, the whole thing crashes and you spend
+          an hour wondering if the USB camera is broken when the problem is
+          just display plumbing.
+        </p>
+
+        <p>
+          The fix was to split the work. Run the video and display pieces on a
+          machine with a screen attached (the Jetson with an HDMI monitor, or a
+          local terminal on the device itself), and do everything else over SSH
+          from the laptop. Vision on one side, control and logging on the other.
+          Clumsy at first. By Friday it was the only setup that worked.
+        </p>
+
+        <p>
+          None of this photographs well. Every robotics project has this week.
+          You tell yourself you'll be training models by Wednesday, and by
+          Wednesday you're still arguing with <code>dmesg</code> and a depth
+          map that doesn't line up with reality. I did make progress: the Jetson
+          boots cleanly, the camera streams, the calibration numbers look
+          believable. The robot still hasn't done anything clever, but it also
+          hasn't caught fire.
+        </p>
+
+        <h2>the example code can't keep up</h2>
+
+        <p>
+          Once the feed was visible, I started working through the XLerobot
+          example scripts: how they're structured, what they assume about the
+          hardware, where the sharp edges are. There's a follow demo that
+          points the arm's end-effector at whatever object YOLO sees. On paper
+          it's the fun one.
+        </p>
+
+        <p>
+          In practice it ran <code>yolo11x.pt</code> on the CPU,
+          <em>inline</em>, inside the 50&nbsp;Hz control loop. Every iteration
+          blocked on inference. The arm lurched once every ten seconds,
+          hopelessly behind the cup. The demo looked broken because it was
+          broken. Not because I wired something wrong, but because the reference
+          code put a ten-second synchronous inference call inside a real-time
+          loop.
+        </p>
+
+        <p>
+          The catch on Jetson is that the GPU PyTorch wheels are Python 3.10
+          only, while LeRobot wants 3.12. You can't just move inference to the
+          GPU in the same process. So I wrote a new version: a vision sidecar
+          doing YOLO on the GPU in a 3.10 env, and the control loop in the 3.12
+          env, talking over localhost UDP (<code>seq, capture_ts, dx, dy</code>).
+          The only thing that changed was <em>where YOLO runs</em>. Everything
+          else (IK, gains, calibration) stayed fixed.
+        </p>
+
+        <p>The gap was bigger than I expected.</p>
+
+        <section class="experiment" aria-labelledby="exp-heading">
+          <span class="experiment-label">experiment 1 · yolo ee-follow latency</span>
+          <h3 id="exp-heading">cpu inline vs gpu split</h3>
+          <p class="chart-card-note" style="margin-bottom: 0;">
+            Same pink cup, same ~42&nbsp;s run, warmup sample excluded. Median
+            numbers from the logged runs.
+          </p>
+
+          <div class="exp-stats">
+            <div class="exp-stat">
+              <span class="exp-stat-value">87.6×</span>
+              <span class="exp-stat-label">faster inference</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">79.5×</span>
+              <span class="exp-stat-label">lower end-to-end latency</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">479×</span>
+              <span class="exp-stat-label">higher loop rate</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">81×</span>
+              <span class="exp-stat-label">more detections / s</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">speedup at a glance</div>
+            <p class="chart-card-note">
+              Factor improvement of the GPU split over the CPU baseline, per
+              metric (log scale).
+            </p>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-speedup"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">latency: lower is better</div>
+            <p class="chart-card-note">
+              Median inference time and capture→action latency, in
+              milliseconds (log scale).
+            </p>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-latency"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">control loop iterations in ~42&nbsp;s</div>
+            <p class="chart-card-note">
+              The clearest picture of the stall: the CPU baseline completed 5
+              loop iterations; the GPU split completed 2,057.
+            </p>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-iterations"></canvas>
+            </div>
+          </div>
+
+          <div class="exp-stills">
+            <div class="exp-still exp-still--before">
+              <figure>
+                <div class="vp vp--before" data-vp>
+                  <video
+                    src="../assets/exp1-yolo-ee-latency/before.mp4"
+                    poster="../assets/exp1-yolo-ee-latency/before_still.jpg"
+                    loop
+                    muted
+                    playsinline
+                    preload="none"
+                    aria-label="CPU baseline footage: stuttery tracking, ~9763 ms inference"
+                  ></video>
+                </div>
+                <figcaption>before · cpu inline · ~9763 ms / 0.1 Hz</figcaption>
+              </figure>
+            </div>
+            <div class="exp-still exp-still--after">
+              <figure>
+                <div class="vp vp--after" data-vp>
+                  <video
+                    src="../assets/exp1-yolo-ee-latency/after.mp4"
+                    poster="../assets/exp1-yolo-ee-latency/after_still.jpg"
+                    loop
+                    muted
+                    playsinline
+                    preload="none"
+                    aria-label="GPU split footage: smooth tracking, ~111 ms inference"
+                  ></video>
+                </div>
+                <figcaption>after · gpu split · ~111 ms</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <p>
+          On this platform the bottleneck wasn't the IK or the arm. It was
+          synchronous CPU inference sitting inside the loop. Move YOLO off the
+          control thread and visual servoing goes from broken to actually
+          tracking the cup.
+        </p>
+
+        <h2>what I took from it</h2>
+
+        <p>
+          The example code wasn't buggy. It was a sketch someone wrote to show
+          how the pieces fit together, and I treated it like production code.
+          Reference demos are written to be read, not to hold a 50&nbsp;Hz
+          deadline. I'd have bet the arm or the IK would be the problem. It was
+          one blocking inference call on the control thread, the kind of thing
+          a demo hides and a real loop can't.
+        </p>
+
+        <p>
+          The fix I'm least proud of is probably the one I'll keep. Splitting
+          Python versions (3.10 for the GPU wheels, 3.12 for LeRobot) looked
+          like pure friction. It also forced perception and control into
+          separate processes, which is what you'd want anyway. I wouldn't have
+          chosen that architecture on purpose. Jetson made me.
+        </p>
+
+        <p>
+          The gap between the world-model talks and the calibration worksheet
+          is wider than I remembered from 2022. The research stack assumes a
+          working robot. The robot stack assumes you already know which cable
+          is lying to you. Week 1 lived entirely on the robot stack.
+        </p>
+
+        <p>
+          Somewhere in the cable-wrangling I had my first conversation with a
+          potential customer. The challenge isn't to make an arm twitch. It's
+          to build something someone will actually pay for, and I don't fully
+          know what that is yet. No MVP, no demo worth showing. Still, saying
+          out loud what I'm building toward, in plain language instead of
+          architecture diagrams, was the harder calibration this week. No
+          worksheet for that one.
+        </p>
+
+        <p>
+          I'd rather eat this week now than discover it in September. Next week
+          I want teleop working, a camera feed I trust, and a demo trajectory I
+          can record without improvising fixes mid-session.
+        </p>
+
+        <section class="week-resources" aria-labelledby="week-resources-heading">
+          <div class="week-resources-header">
+            <h2 id="week-resources-heading">this week's reading</h2>
+            <span class="week-resources-count">9 resources</span>
+          </div>
+          <p class="week-resources-intro">
+            I'm keeping a running list each week so future-me can see what
+            shaped the thinking.
+          </p>
+          <ul class="week-resources-list">
+            <li class="week-resource">
+              <span class="week-resource-type">video</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://www.youtube.com/watch?v=xL6Y0dpXEwc"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >How Could Machines Reach Human-Level Intelligence? · Yann LeCun</a
+                >
+                <p class="week-resource-note">
+                  World-model / JEPA framing before touching policy code. LeCun
+                  makes the case for predicting in latent space instead of
+                  generating pixels when you actually want to plan.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Introducing V-JEPA 2 · Meta AI</a
+                >
+                <p class="week-resource-note">
+                  Follow-up to the lecture: what they actually shipped, and the
+                  claim that a little robot data goes a long way once the world
+                  model is pretrained on video.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://generalistai.com/blog/beyond-world-models"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Going Beyond World Models &amp; VLAs · Generalist</a
+                >
+                <p class="week-resource-note">
+                  Counterpoint from the people who co-invented VLAs: labels
+                  matter less than the goal, and with enough robot data you may
+                  not need either crutch. Pushed back on the JEPA thread in a
+                  useful way.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">docs</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://huggingface.co/docs/lerobot/index"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >LeRobot documentation</a
+                >
+                <p class="week-resource-note">
+                  Open-source stack for datasets, teleop, and getting policies
+                  onto real arms. Useful map of the tooling around the XLerobot
+                  ecosystem.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://www.physicalintelligence.company/blog/pi0"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >π0: a vision-language-action flow model · Physical Intelligence</a
+                >
+                <p class="week-resource-note">
+                  Frontier VLA design from the people shipping generalist robot
+                  policies. Language in, actions out, lots of real-world data.
+                  Different bet from the world-model route.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://huggingface.co/blog/smolvla"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >SmolVLA · Hugging Face</a
+                >
+                <p class="week-resource-note">
+                  Compact open VLA from the LeRobot team, trained on community
+                  SO100/SO101 data and small enough to run on consumer hardware.
+                  Closest thing I read to my actual setup.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">docs</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://docs.ultralytics.com/integrations/tensorrt/"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >TensorRT export for YOLO · Ultralytics</a
+                >
+                <p class="week-resource-note">
+                  The natural next step after this week's experiment: once YOLO is
+                  on the GPU, TensorRT (FP16/INT8) is how you claw back the last
+                  bit of latency on Jetson. Bookmarked for when ~7.7 detections/s
+                  isn't enough.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://openvla.github.io/"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >OpenVLA · open-source vision-language-action model</a
+                >
+                <p class="week-resource-note">
+                  Open, fine-tunable end of the generalist-policy spectrum.
+                  Same broad idea as π0, different tradeoffs around openness
+                  and adaptation.
+                </p>
+              </div>
+            </li>
+            <li class="week-resource">
+              <span class="week-resource-type">article</span>
+              <div class="week-resource-body">
+                <a
+                  href="https://diffusion-policy.cs.columbia.edu/"
+                  class="week-resource-title"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Diffusion Policy · Columbia</a
+                >
+                <p class="week-resource-note">
+                  The visuomotor-policy paper a lot of current work builds on.
+                  Reframes control as action diffusion, helpful grounding before
+                  I try training anything past a hand-written loop.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a href="summer-robotics-week-0.html" class="week-nav-link week-nav-prev"
+            >← week 0</a
+          >
+        </nav>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="../video-player.js"></script>
+    <script>
+      (function () {
+        if (typeof Chart === "undefined") return;
+
+        const COLOR_BEFORE = "#d9645f";
+        const COLOR_AFTER = "#57d98a";
+        const GRID = "rgba(255, 255, 255, 0.06)";
+        const TICK = "#777";
+
+        Chart.defaults.color = TICK;
+        Chart.defaults.font.family =
+          "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+        Chart.defaults.font.size = 11;
+        Chart.defaults.animation.duration =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? 0
+            : 800;
+
+        // Draws the value at the end of each bar.
+        const valueLabels = {
+          id: "valueLabels",
+          afterDatasetsDraw(chart, _args, opts) {
+            const { ctx } = chart;
+            const fmt = (opts && opts.formatter) || ((v) => v);
+            const horizontal = chart.options.indexAxis === "y";
+            ctx.save();
+            ctx.font = "600 11px 'Inter', sans-serif";
+            ctx.textBaseline = "middle";
+            chart.data.datasets.forEach((ds, di) => {
+              const meta = chart.getDatasetMeta(di);
+              if (meta.hidden) return;
+              meta.data.forEach((bar, i) => {
+                const raw = ds.data[i];
+                if (raw == null) return;
+                ctx.fillStyle =
+                  (Array.isArray(ds.backgroundColor)
+                    ? ds.backgroundColor[i]
+                    : ds.backgroundColor) || TICK;
+                if (horizontal) {
+                  ctx.textAlign = "left";
+                  ctx.fillText(fmt(raw), bar.x + 8, bar.y);
+                } else {
+                  ctx.textAlign = "center";
+                  ctx.fillText(fmt(raw), bar.x, bar.y - 9);
+                }
+              });
+            });
+            ctx.restore();
+          },
+        };
+
+        const baseTooltip = {
+          backgroundColor: "#0a0a0a",
+          borderColor: "#2a2a2a",
+          borderWidth: 1,
+          titleColor: "#eee",
+          bodyColor: "#bbb",
+          padding: 10,
+          displayColors: false,
+        };
+
+        // 1. Speedup factors (horizontal, log scale)
+        new Chart(document.getElementById("chart-speedup"), {
+          type: "bar",
+          data: {
+            labels: [
+              "inference",
+              "end-to-end latency",
+              "control loop rate",
+              "vision throughput",
+            ],
+            datasets: [
+              {
+                data: [87.6, 79.5, 479, 81],
+                backgroundColor: COLOR_AFTER,
+                borderRadius: 4,
+                barThickness: 18,
+              },
+            ],
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { right: 44 } },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                ...baseTooltip,
+                callbacks: { label: (c) => c.raw + "× better" },
+              },
+              valueLabels: { formatter: (v) => v + "×" },
+            },
+            scales: {
+              x: {
+                type: "logarithmic",
+                grid: { color: GRID, drawBorder: false },
+                ticks: {
+                  color: TICK,
+                  callback: (v) =>
+                    [1, 10, 100, 1000].includes(v) ? v + "×" : "",
+                },
+              },
+              y: { grid: { display: false }, ticks: { color: "#aaa" } },
+            },
+          },
+          plugins: [valueLabels],
+        });
+
+        // 2. Latency comparison (log scale, ms)
+        new Chart(document.getElementById("chart-latency"), {
+          type: "bar",
+          data: {
+            labels: ["inference", "capture → action"],
+            datasets: [
+              {
+                label: "before (cpu inline)",
+                data: [9776.7, 9781.0],
+                backgroundColor: COLOR_BEFORE,
+                borderRadius: 4,
+                barPercentage: 0.7,
+              },
+              {
+                label: "after (gpu split)",
+                data: [111.6, 123.1],
+                backgroundColor: COLOR_AFTER,
+                borderRadius: 4,
+                barPercentage: 0.7,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 16 } },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 10, boxHeight: 10, padding: 16 },
+              },
+              tooltip: {
+                ...baseTooltip,
+                callbacks: {
+                  label: (c) => c.dataset.label + ": " + c.raw + " ms",
+                },
+              },
+              valueLabels: {
+                formatter: (v) =>
+                  v >= 1000 ? (v / 1000).toFixed(1) + " s" : Math.round(v) + " ms",
+              },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: "#aaa" } },
+              y: {
+                type: "logarithmic",
+                grid: { color: GRID, drawBorder: false },
+                ticks: {
+                  color: TICK,
+                  callback: (v) =>
+                    [10, 100, 1000, 10000].includes(v)
+                      ? v >= 1000
+                        ? v / 1000 + "s"
+                        : v + "ms"
+                      : "",
+                },
+              },
+            },
+          },
+          plugins: [valueLabels],
+        });
+
+        // 3. Loop iterations completed in ~42 s (linear; the contrast is the point)
+        new Chart(document.getElementById("chart-iterations"), {
+          type: "bar",
+          data: {
+            labels: ["before (cpu inline)", "after (gpu split)"],
+            datasets: [
+              {
+                data: [5, 2057],
+                backgroundColor: [COLOR_BEFORE, COLOR_AFTER],
+                borderRadius: 4,
+                barPercentage: 0.55,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 18 } },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                ...baseTooltip,
+                callbacks: {
+                  label: (c) => c.raw.toLocaleString() + " iterations",
+                },
+              },
+              valueLabels: { formatter: (v) => v.toLocaleString() },
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: "#aaa" } },
+              y: {
+                beginAtZero: true,
+                grid: { color: GRID, drawBorder: false },
+                ticks: { color: TICK },
+              },
+            },
+          },
+          plugins: [valueLabels],
+        });
+      })();
+    </script>
+  </body>
+</html>
