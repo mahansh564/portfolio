@@ -368,6 +368,23 @@ h2 {
   line-height: 1.75;
 }
 
+.co {
+  display: inline;
+  white-space: nowrap;
+}
+
+.co-logo {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  margin-right: 3px;
+  background: #1e1e1e;
+}
+
 .article p {
   margin-bottom: 20px;
 }
