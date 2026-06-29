@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 2: Gripped by Reality | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 2 of the Summer Robotics Challenge: first VR teleop on Meta Quest, a custom parallel gripper, hardware that fights back, and a chess robot so a friend can play remotely."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-2"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-2"
+    />
+    <meta
+      property="og:title"
+      content="Week 2: Gripped by Reality | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 2: VR teleop, a 3D-printed gripper, destroyed screws, and building a chess robot for remote play."
+    />
+    <meta property="article:published_time" content="2026-06-29" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 2: Gripped by Reality",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-06-29",
+        "description": "Week 2 of the Summer Robotics Challenge: first VR teleop on Meta Quest, a custom parallel gripper, hardware that fights back, and a chess robot so a friend can play remotely.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-2",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 2
+        </p>
+        <h1>gripped by reality</h1>
+        <div class="post-meta">
+          <span class="post-date">29 jun 2026</span>
+          <span class="post-reading-time">7 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 2</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <p>
+          Week 1 ended with a promise: teleop working, a camera feed I trust,
+          something I could record without improvising mid-session. Week 2 got me
+          the camera feed and a first VR session. Teleop still isn't clean
+          enough to record. The gripper install ate the rest of the week.
+        </p>
+
+        <p>
+          I put on a Meta Quest for the first time and teleoperated a real arm.
+          That part was genuinely sick. Then I spent an afternoon destroying
+          screws, cracking a 3D print, and wondering why nobody warns you that
+          robotics has a torque spec.
+        </p>
+
+        <h2>first time in vr</h2>
+
+        <p>
+          I'd never used a Quest before. Strapped it on, opened the teleop
+          stack, squeezed the grip on the right controller, and the arm moved
+          where I moved. Not smoothly at first. The first session was jittery
+          enough that I couldn't pick up a pawn, but it still felt like
+          reaching for things, not clicking through a menu.
+        </p>
+
+        <p>
+          The stack runs through
+          <a
+            href="https://github.com/SpesRobotics/telegrip"
+            target="_blank"
+            rel="noopener noreferrer"
+            >telegrip</a
+          >: WebSocket VR input, pybullet IK, and our record loop reading joint
+          targets off the solver and commanding the real XLerobot arm. Getting
+          there took more software archaeology than I'd like to admit: wrong
+          URDF path, units mismatch between degrees and normalized motor
+          ranges, a grip-origin bug that made the arm crawl instead of follow.
+          Once it worked, I understood why people tolerate the cable mess.
+        </p>
+
+        <p>
+          That doesn't mean I can pick anything up yet. The arm still jitters on
+          the bench. I spent most of the debugging time on it: EMA smoothing on
+          the five arm joints (gripper left alone so open/close stays sharp),
+          telegrip's IK loop bumped from 20 Hz to 50 Hz, idle-sync fixed so a
+          grip press roots from the real pose instead of a zero pose captured
+          while you're sitting at the setup prompt. Offline sim looked much
+          cleaner. On hardware the arm still hunts around the target. I can
+          reach toward a piece. Closing the gripper on one reliably is still
+          out.
+        </p>
+
+        <h2>a gripper and a torque spec</h2>
+
+        <p>
+          The stock gripper wasn't cutting it for chess pieces. Too narrow, too
+          fiddly on small objects. So I designed and printed a custom parallel
+          gripper: two fingers, symmetric stroke, meant to pick up a knight
+          without launching it across the room.
+        </p>
+
+        <p>
+          Installing it was the week.
+        </p>
+
+        <p>
+          I (over)screwed up. Stripped heads. Snapped a print trying to force
+          alignment. Had to reorder hardware and reprint a mount at 100% infill
+          like that would teach the plastic a lesson. In software, a bad deploy
+          rolls back. In hardware, a bad deploy sends you to the hardware store
+          at 6pm on a Saturday. You don't get this failure mode from a failed
+          CI check.
+        </p>
+
+        <p>
+          The gripper works now. Parallel, stable, picks up a rook cleanly. The
+          install cost me more time than every bug I fixed in the teleop stack
+          combined. I'm keeping that ratio in mind.
+        </p>
+
+        <h2>the chess retention crisis</h2>
+
+        <p>
+          My closest friend used to live ten minutes away. In 2023 we'd play
+          chess in person roughly three times a week, kitchen table, no clock,
+          trash talk included. Then he moved. Forty-five minutes away now. Different
+          city, longer metro ride. We didn't slowly play less. We mostly stopped.
+        </p>
+
+        <p>
+          Being a builder, I did what any reasonable person would do: I
+          pretended this was a metrics problem. Pulled rough session counts from
+          memory and calendar scraps, normalized to monthly active in-person
+          games, ran year-over-year on it like it was a startup metric. The
+          numbers were sloppy. The answer wasn't.
+        </p>
+
+        <section class="experiment" aria-labelledby="chess-exp-heading">
+          <span class="experiment-label">study 0 · in-person chess engagement</span>
+          <h3 id="chess-exp-heading">monthly sessions, 2023 → jun 2026</h3>
+          <p class="chart-card-note" style="margin-bottom: 0;">
+            Self-reported in-person games vs. one chess.com trial window (shaded).
+            n ≈ small and biased. emotionally significant anyway.
+          </p>
+
+          <div class="exp-stats">
+            <div class="exp-stat">
+              <span class="exp-stat-value">3.1×</span>
+              <span class="exp-stat-label">2023 weekly baseline</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">−71%</span>
+              <span class="exp-stat-label">YoY in-person (2023→2024)</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">−89%</span>
+              <span class="exp-stat-label">YoY in-person (2024→2025)</span>
+            </div>
+            <div class="exp-stat">
+              <span class="exp-stat-value">0</span>
+              <span class="exp-stat-label">repeat chess.com streaks</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">in-person sessions / month</div>
+            <p class="chart-card-note">
+              Kitchen-table games only. chess.com trial shown separately; it
+              spiked, then churned.
+            </p>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-chess-sessions"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-title">distance vs. engagement</div>
+            <p class="chart-card-note">
+              Commute time (minutes, one way) overlaid on trailing 3-month
+              average session rate. Correlation ≠ causation. Felt like causation.
+            </p>
+            <div class="chart-canvas-wrap">
+              <canvas id="chart-chess-distance"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <p>
+          We tried chess.com. Played a dozen games over two weeks. Technically
+          fine. Felt wrong without a board between us, without the pause to
+          refill tea, without the post-game autopsy at the same table. We
+          didn't keep playing online.
+        </p>
+
+        <p>
+          So I'm building a robot that plays chess with me. My friend can
+          connect remotely, send a move, and the robot executes it on my board.
+          Physical game, distributed players. Over-engineered, probably. Also
+          the kind of thing a summer with a dual-arm platform was made for.
+        </p>
+
+        <h2>the chess robot (early)</h2>
+
+        <p>
+          I've just started building toward this. One arm watches the board from
+          a fixed scan pose, the other arm plays. Perception reads the board
+          into FEN; a game loop talks to Stockfish; teleop records demos for an
+          ACT policy later.
+        </p>
+
+        <p>
+          Some pieces exist. Scan pose (M0) gets all 64 squares in one wrist-cam
+          frame; the back rank is foreshortened but usable. Board-to-FEN uses
+          homography warp, empty-board reference subtraction, and edge-diff
+          occupancy. Starting position reads correctly after three pivots and one
+          camera re-angle. Move detection passes synthetic tests for e2e4 and
+          Nf3 from saved frames; real scan→move→scan still needs a bench run.
+          The game loop scaffold runs full turn-taking in sim mode with
+          python-chess. Live mode is wired, but the Stockfish binary isn't
+          installed yet. VR teleop runs through telegrip with smoothing and comm
+          retries wired in, but I still can't record a clean pick.
+        </p>
+
+        <p>
+          Plenty still missing. I haven't recorded 50+ teleop pick/place
+          episodes (M1). Need clean trajectories before ACT training is real.
+          Perception is clever but brittle: false positives on edge squares,
+          phantom pieces if the board nudges between captures, oblique view
+          misses low-contrast pieces on dark squares. We papered over some of
+          this with a soft start-gate (seed from known starting FEN, detect
+          <em>changes</em>), but a bumped board still hurts. No trained ACT
+          policy (M2) yet, so the robot can't autonomously move a piece. The
+          remote friend path is sketched (friend sends UCI over the network,
+          loop validates and executes) but none of the plumbing exists.
+          Captures and special moves (M5) are deferred. Robot knocking a queen
+          off the board is a problem for future-me.
+        </p>
+
+        <p>
+          Lots to figure out. The gap between "correct starting FEN in a saved
+          JPEG" and "robot plays a full game while your friend trash-talks from
+          forty-five minutes away" is still most of the summer.
+        </p>
+
+        <h2>what I took from it</h2>
+
+        <p>
+          The Quest moment I keep coming back to: jittery arm, couldn't close on
+          a pawn, and I still didn't want to take the headset off. That's the
+          split this week. One side felt like the embodied-AI demos I'd been
+          reading about. The other was me at the hardware store on a Saturday
+          with stripped screw heads in my pocket.
+        </p>
+
+        <p>
+          The chess charts are half a joke. The other half is simpler. My friend
+          moved across town, the games mostly stopped, and chess.com didn't fix
+          it because there was no table between us, no pause to refill tea, no
+          post-game autopsy at the same counter. I'm building a robot to get
+          that back.
+        </p>
+
+        <p>
+          Week 1 was infrastructure I could hide behind. Week 2 was the first
+          time I wanted to show someone the robot, and the first time the robot
+          asked for a torque driver instead of a debugger. Next week I want one
+          pick I can actually record, Stockfish on the Jetson, and one honest
+          scan→move→scan on the bench. And maybe a text to my friend about what
+          I'm building.
+        </p>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a href="summer-robotics-week-1.html" class="week-nav-link week-nav-prev"
+            >← week 1</a
+          >
+        </nav>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script>
+      (function () {
+        if (typeof Chart === "undefined") return;
+
+        const COLOR_INPERSON = "#57d98a";
+        const COLOR_CHESSCOM = "#d9645f";
+        const COLOR_DISTANCE = "#6b8cff";
+        const GRID = "rgba(255, 255, 255, 0.06)";
+        const TICK = "#777";
+
+        Chart.defaults.color = TICK;
+        Chart.defaults.font.family =
+          "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+        Chart.defaults.font.size = 11;
+        Chart.defaults.animation.duration =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? 0
+            : 800;
+
+        const months = [
+          "jan", "feb", "mar", "apr", "may", "jun",
+          "jul", "aug", "sep", "oct", "nov", "dec",
+        ];
+
+        // 2023–jun 2026 monthly in-person sessions (self-reported)
+        const inPerson = [
+          11, 13, 12, 14, 13, 12, 11, 13, 12, 13, 12, 11,
+          9, 8, 7, 6, 5, 5, 4, 4, 3, 3, 3, 2,
+          2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0,
+          0, 0, 0, 0, 0, 0, 0,
+        ];
+
+        const chessComTrial = [
+          null, null, null, null, null, null, null, null, null, null, null, null,
+          null, null, null, null, null, null, null, null, null, null, null, null,
+          null, null, null, null, 4, 5, 3, 0, null, null, null, null,
+          null, null, null, null, null, null, null,
+        ];
+
+        const labels = [];
+        for (let y = 2023; y <= 2026; y++) {
+          const monthCount = y === 2026 ? 6 : 12;
+          for (let i = 0; i < monthCount; i++) {
+            labels.push(months[i] + " '" + String(y).slice(2));
+          }
+        }
+
+        // 1. Monthly sessions line chart
+        new Chart(document.getElementById("chart-chess-sessions"), {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "in-person",
+                data: inPerson,
+                borderColor: COLOR_INPERSON,
+                backgroundColor: "rgba(87, 217, 138, 0.08)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 0,
+                pointHitRadius: 8,
+                borderWidth: 2,
+              },
+              {
+                label: "chess.com (trial)",
+                data: chessComTrial,
+                borderColor: COLOR_CHESSCOM,
+                backgroundColor: "rgba(217, 100, 95, 0.12)",
+                fill: true,
+                tension: 0.2,
+                pointRadius: 3,
+                pointHitRadius: 8,
+                borderWidth: 2,
+                spanGaps: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 10, boxHeight: 10, padding: 16 },
+              },
+              tooltip: {
+                backgroundColor: "#0a0a0a",
+                borderColor: "#2a2a2a",
+                borderWidth: 1,
+                titleColor: "#eee",
+                bodyColor: "#bbb",
+                padding: 10,
+                callbacks: {
+                  label: (c) =>
+                    c.dataset.label +
+                    ": " +
+                    (c.raw == null ? "—" : c.raw + " sessions"),
+                },
+              },
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  color: TICK,
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 12,
+                },
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: GRID, drawBorder: false },
+                ticks: { color: TICK, stepSize: 2 },
+                title: {
+                  display: true,
+                  text: "sessions / month",
+                  color: "#666",
+                  font: { size: 10 },
+                },
+              },
+            },
+          },
+        });
+
+        // 2. Distance vs trailing 3-mo avg sessions (dual axis)
+        const distance = [
+          10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+          10, 10, 10, 15, 20, 25, 30, 35, 40, 42, 45, 45,
+          45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
+          45, 45, 45, 45, 45, 45, 45,
+        ];
+
+        const trailingAvg = inPerson.map((_, i) => {
+          const slice = inPerson.slice(Math.max(0, i - 2), i + 1);
+          return +(slice.reduce((a, b) => a + b, 0) / slice.length).toFixed(1);
+        });
+
+        new Chart(document.getElementById("chart-chess-distance"), {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "3-mo avg sessions",
+                data: trailingAvg,
+                borderColor: COLOR_INPERSON,
+                backgroundColor: "transparent",
+                tension: 0.35,
+                pointRadius: 0,
+                borderWidth: 2,
+                yAxisID: "y",
+              },
+              {
+                label: "commute (min)",
+                data: distance,
+                borderColor: COLOR_DISTANCE,
+                backgroundColor: "transparent",
+                tension: 0.15,
+                pointRadius: 0,
+                borderWidth: 2,
+                borderDash: [4, 4],
+                yAxisID: "y1",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { boxWidth: 10, boxHeight: 10, padding: 16 },
+              },
+              tooltip: {
+                backgroundColor: "#0a0a0a",
+                borderColor: "#2a2a2a",
+                borderWidth: 1,
+                titleColor: "#eee",
+                bodyColor: "#bbb",
+                padding: 10,
+              },
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  color: TICK,
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 12,
+                },
+              },
+              y: {
+                position: "left",
+                beginAtZero: true,
+                grid: { color: GRID, drawBorder: false },
+                ticks: { color: COLOR_INPERSON },
+                title: {
+                  display: true,
+                  text: "avg sessions",
+                  color: "#666",
+                  font: { size: 10 },
+                },
+              },
+              y1: {
+                position: "right",
+                beginAtZero: true,
+                grid: { drawOnChartArea: false },
+                ticks: { color: COLOR_DISTANCE },
+                title: {
+                  display: true,
+                  text: "one-way min",
+                  color: "#666",
+                  font: { size: 10 },
+                },
+              },
+            },
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>
