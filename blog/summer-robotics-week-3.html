@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 3: Gone Fishing (In Greece) | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 3 of the Summer Robotics Challenge: no robots, no Jetson, no chess. Just me, an island in Greece, and a strong commitment to doing absolutely nothing."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-3"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-3"
+    />
+    <meta
+      property="og:title"
+      content="Week 3: Gone Fishing (In Greece) | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 3: I went to Greece and did not touch the robot. That's the whole update. Regular programming resumes in week 4."
+    />
+    <meta property="article:published_time" content="2026-07-13" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 3: Gone Fishing (In Greece)",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-07-13",
+        "description": "Week 3 of the Summer Robotics Challenge: no robots, no Jetson, no chess. Just me, an island in Greece, and a strong commitment to doing absolutely nothing.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-3",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+
+    <style>
+      .vacation-hero {
+        margin: 2rem 0 2.5rem;
+        padding: 2.5rem 2rem;
+        border-radius: 16px;
+        text-align: center;
+        background: linear-gradient(135deg, #1a6fe0 0%, #2ea3d9 45%, #f4c85a 100%);
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .vacation-hero .sun {
+        font-size: 3rem;
+        line-height: 1;
+        display: block;
+        margin-bottom: 0.5rem;
+        animation: bob 3s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .vacation-hero .sun { animation: none; }
+      }
+      @keyframes bob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+      .vacation-hero .ooo {
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        opacity: 0.9;
+      }
+      .vacation-hero .big {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin: 0.4rem 0 0;
+      }
+      .vacation-list {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+      }
+      .vacation-list li {
+        padding: 0.55rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .vacation-list li::before {
+        content: "🌊 ";
+      }
+      .vacation-list li.did-not::before {
+        content: "🚫 ";
+      }
+      .receipt {
+        border: 1px dashed #3a3a3a;
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin: 1.75rem 0;
+        font-family: "Inter", monospace;
+      }
+      .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.3rem 0;
+        color: #bbb;
+      }
+      .receipt-row.total {
+        border-top: 1px solid #3a3a3a;
+        margin-top: 0.5rem;
+        padding-top: 0.6rem;
+        color: #eee;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 3
+        </p>
+        <h1>gone chilling (in greece)</h1>
+        <div class="post-meta">
+          <span class="post-date">13 jul 2026</span>
+          <span class="post-reading-time">2 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 3</span>
+          <span class="tag">🏝️ ooo</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <div class="vacation-hero">
+          <span class="sun">🌞</span>
+          <span class="ooo">out of office</span>
+          <p class="big">I was in Greece. The robot was not.</p>
+        </div>
+
+        <p>
+          That's the update. That's basically the whole post. Go outside.
+        </p>
+
+        <p>
+          Still here? Okay. Week 3 was a vacation. I flew to Greece, put my
+          phone on airplane mode, and committed to doing nothing. No Jetson, no
+          Quest, no "quick check" of the bench at 1am that quietly eats four
+          hours. The chess robot stayed exactly where I left it: slightly broken
+          and completely unbothered.
+        </p>
+
+        <h2>what I shipped this week</h2>
+
+        <ul class="vacation-list">
+          <li>a truly heroic amount of tzatziki</li>
+          <li>zero (0) commits to the repo</li>
+          <li>one sunburn, later patched with aloe</li>
+          <li>several sunsets, no compile step required</li>
+        </ul>
+
+        <h2>what I did not ship</h2>
+
+        <ul class="vacation-list">
+          <li class="did-not">teleop that doesn't shake</li>
+          <li class="did-not">a single recorded pick/place episode</li>
+          <li class="did-not">any perception fixes whatsoever</li>
+          <li class="did-not">emails (allegedly)</li>
+        </ul>
+
+        <h2>the sprint retro</h2>
+
+        <div class="receipt">
+          <div class="receipt-row"><span>bugs fixed</span><span>0</span></div>
+          <div class="receipt-row"><span>bugs created</span><span>0</span></div>
+          <div class="receipt-row">
+            <span>net progress on chess robot</span><span>0</span>
+          </div>
+          <div class="receipt-row">
+            <span>iced chocolates consumed</span><span>∞</span>
+          </div>
+          <div class="receipt-row total">
+            <span>would recommend</span><span>10 / 10</span>
+          </div>
+        </div>
+
+        <p>
+          The less funny version: twelve weeks is a long stretch, and grinding
+          through all of it with no break is how you quit somewhere around week
+          eight. I'd spent most of the summer fighting jittery arms and phantom
+          pieces on empty squares. A week of not thinking about any of it did
+          more for the project than another week of debugging would have.
+        </p>
+
+        <p>
+          I came back to the same gripper that doesn't fit, the same shaky
+          teleop, and the same board pipeline that lies about empty squares. The
+          difference is I actually wanted to go fix them again.
+        </p>
+
+        <p>
+          Normal programming resumes in
+          <a href="summer-robotics-week-4.html">week 4</a>, where I stop seeing
+          in vibes and start seeing in millimeters.
+        </p>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a
+            href="summer-robotics-week-2.html"
+            class="week-nav-link week-nav-prev"
+            >← week 2</a
+          >
+          <a
+            href="summer-robotics-week-4.html"
+            class="week-nav-link week-nav-next"
+            >week 4 →</a
+          >
+        </nav>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

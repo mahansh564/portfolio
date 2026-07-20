@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 4: Seeing in Millimeters | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 4 of the Summer Robotics Challenge: back from vacation, a reprinted gripper, an Orbbec depth camera, and chess board perception that finally reads 64/64."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-4"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-4"
+    />
+    <meta
+      property="og:title"
+      content="Week 4: Seeing in Millimeters | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 4: Orbbec depth camera, ArUco localization, 64/64 board reads, and VR teleop that still shakes."
+    />
+    <meta property="article:published_time" content="2026-07-20" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 4: Seeing in Millimeters",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-07-20",
+        "description": "Week 4 of the Summer Robotics Challenge: back from vacation, a reprinted gripper, an Orbbec depth camera, and chess board perception that finally reads 64/64.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-4",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 4
+        </p>
+        <h1>seeing in millimeters</h1>
+        <div class="post-meta">
+          <span class="post-date">20 jul 2026</span>
+          <span class="post-reading-time">6 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 4</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <p>
+          Week 3 was a vacation. Abroad, phone in airplane mode most of the
+          day, no Jetson, no Quest, no "quick check" of the bench. I came back
+          to a gripper that still didn't fit, a teleop stack that still shook,
+          and a board pipeline that still lied about empty squares.
+        </p>
+
+        <p>
+          This week fixed the seeing part. The moving part is still arguing with
+          me.
+        </p>
+
+        <h2>a gripper that finally fits</h2>
+
+        <p>
+          Week 2 ended with a custom parallel gripper that sort of worked and
+          sort of fought the mount every time I bolted it on. And then it broke. So I reprinted the gripper. The print was the
+          problem, not the CAD. Wrong print direction, layers too thick for the
+          tolerances I needed.
+        </p>
+
+        <p>
+          New print. Changed orientation so the load sits across layers instead
+          of peeling them apart. Dropped layer height. The part seats cleanly
+          now. No forcing, no cracked plastic, no Saturday trip for replacement
+          screws. Boring hardware win. I will take it.
+        </p>
+
+        <h2>an orbbec shows up</h2>
+
+        <p>
+          After many delivery delays, we finally got a depth camera from the organisers.
+          I mounted the Orbbec depth camera as the head camera. It gives me
+          color and depth over standard drivers, no special SDK just to pull
+          frames, which was a relief after a week of fighting the camera setup.
+        </p>
+
+        <p>
+          Plugging it in reshuffled every other camera on the machine, so the
+          old wrist and head feeds suddenly pointed at the wrong streams. I
+          pinned everything to stable device names so a reboot stops inventing a
+          new camera layout overnight.
+        </p>
+
+        <p>
+          That camera also killed the old architecture. The "observer arm holds
+          a scan pose so its wrist cam sees the board" story is no longer true. Now the setup matches reality: a fixed overhead
+          cam always sees the board, both arms are players, and both return to a
+          rest pose before a scan so they stay out of frame. 
+        </p>
+
+        <h2>localisation that survives a nudge</h2>
+
+        <p>
+          The old color-only approach was clever and brittle. It leaned on a
+          reference photo of the empty board and a stack of image tricks to spot
+          what changed. It worked until the board nudged a few pixels while I
+          cleared the pieces. Then phantoms everywhere.
+        </p>
+
+        <p>
+          Two upgrades closed most of that.
+        </p>
+
+        <p>
+          First, ArUco markers on the board corners. When the board shifts, the
+          markers tell me exactly how far, and the pipeline falls back through a
+          few gentler methods if it can't find them. Once the four markers were
+          printed, stuck on, and registered, a live scan locked onto the board
+          cleanly and read the starting position dead on. I did learn this one
+          the hard way: a live game once aborted mid-play, convinced there were
+          phantom pieces on empty squares, because I'd re-run an old calibration
+          step and quietly overwritten the good setup with a bad one.
+        </p>
+
+        <p>
+          Second, depth occupancy. The depth stream is accurate to well under a
+          millimeter against pieces that stick up a few centimeters. That is a
+          different sport from squinting at brightness differences in a color
+          image.
+        </p>
+
+        <p>
+          Instead of guessing from appearance, I take the depth image, figure
+          out where the flat board plane is, and drop every pixel straight down
+          onto it. A piece gets counted by where its base sits, not where its
+          top leans. That killed the phantoms where a tall pawn looked like it
+          was standing on two squares at once. Color still comes from the RGB
+          image, but only on squares depth has already called occupied.
+        </p>
+
+        <p>
+          Live mid-game position, pieces on 24 squares: 64 out of 64 squares
+          right on occupancy, 64 out of 64 on color, no empty-board reference
+          photo needed. A whole class of alignment bugs is just gone, because
+          flat grid lines don't stick up, so they can't fool a height check.
+        </p>
+
+        <p>
+          Limits I am not papering over: a square that's fully hidden behind
+          another piece is still invisible for that one frame, though comparing
+          against the last move already treats that as a safe miss. And the
+          calibration is tuned for this exact camera mount, so if the head cam
+          moves much, or the board slides, I have to redo it.
+        </p>
+
+        <h2>perception is done. motion is not.</h2>
+
+        <p>
+          Localisation and perception are finally boring enough that I stop
+          poking them every evening. The starting position reads exact.
+          Mid-game occupancy holds. The markers keep everything lined up when
+          something bumps the table.
+        </p>
+
+        <p>
+          The robot still has to move pieces.
+        </p>
+
+        <p>
+          VR teleop episode recording is where the week goes soft. The arm
+          follows, but it still shakes. Sensitivity and control logic need
+          another pass before I trust a dataset of pick/place demos. I can see
+          the board. I still cannot cleanly put a pawn on e4 from the Quest
+          without the trajectory looking drunk.
+        </p>
+
+        <p>
+          Next: tune teleop until a grasp is repeatable, record the demos M1
+          has been waiting on, then train ACT on trajectories that do not
+          include my hand tremor as a feature.
+        </p>
+
+        <h2>what I took from it</h2>
+
+        <p>
+          Skipping a week made the gap obvious. The gripper reprint was a
+          print-settings bug dressed up as a design problem. The Orbbec was the
+          first hardware change that made the software story smaller, not
+          bigger.
+        </p>
+
+        <p>
+          Most of June I was arguing with appearance. This month I'm arguing
+          with millimeters. Depth does not care that a black rook sits on a dark
+          square. It cares that something sticks out of the plane. That alone
+          retired a whole family of empty-reference footguns.
+        </p>
+
+        <p>
+          Week 2 ended wanting one clean pick on the bench. Still true. The
+          difference is I no longer need the camera to cooperate before I can
+          blame the arm.
+        </p>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a href="summer-robotics-week-3.html" class="week-nav-link week-nav-prev"
+            >← week 3</a
+          >
+        </nav>
+        <p class="chart-card-note" style="margin-top: 0.5rem">
+          <a href="summer-robotics-week-3.html">week 3</a> was a vacation in
+          Greece. No robots were harmed.
+        </p>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

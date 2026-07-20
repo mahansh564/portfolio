@@ -2,26 +2,30 @@
 
 Posted alongside: `blog/summer-robotics-week-2.html` ("gripped by reality")
 
+**Status: posted**
+
+Attach: in-person chess sessions chart (2023 → jun 2026)
+
 ---
 
-first time in VR teleop this week. pretty sick.
+We don't play chess anymore.
 
-Also destroyed some screws installing a 3D-printed gripper, cracked the print, and learned the hard way that hardware has a torque spec.
+I plotted every chess night with my best friend since 2023. The line hurts.
 
-Meanwhile I ran a completely unscientific "engagement study" on something that was never a product: in-person chess with my closest friend. 2023 baseline was ~3 games/week. He moved from 10 min away to 45. Sessions cliff-dived. We tried chess.com — technically fine, emotionally churned.
+Back then it was maybe three games a week. Kitchen table, no clock, trash talk. Then he moved forty-five minutes away. Graph attached. It basically flatlines at zero by last December.
 
-So now I'm building a robot that plays chess with me. He sends moves remotely, the arm executes them on my board. Kitchen table energy, distributed players.
+We tried chess.com for two weeks. A dozen games. Worked fine. Felt wrong. No board between us, no pause to refill tea, no arguing about the game at the same counter. We stopped.
 
-Early days. Teleop works-ish. Board vision is clever but brittle (false positives, bumped boards). No trained policy yet. Research log is public if you want the messy version.
+So I'm building a chess robot. He sends a move from wherever he is. The arm on my bench plays it on a real board. One arm watches the board from a fixed camera angle. The other moves the pieces. Same kitchen-table game, except he's on his couch and I'm trying to make a dual-arm robot feel like someone sitting across from me.
 
-Full writeup in comments ♟️
+The rest of the week was messier. First time in a Quest teleoperating the actual arm. Jittery enough I couldn't pick up a pawn. Still didn't want to take the headset off. Printed a custom gripper, stripped the screws, hardware store on a Sunday.
+
+Week 2 of the summer robotics hosted by Robotics Nation. Blog in comments ♟️
 
 ---
 
 ## Voice notes
 
-- Opener leads with VR win, then hardware pain — same arc as the blog.
-- Chess graph kept vague on LinkedIn ("engagement study", "cliff-dived") — charts live in the blog.
-- Friend unnamed, chess.com churn as the failed pivot.
-- Robot chess as the over-engineered but honest scope.
-- One emoji, "in comments" CTA.
+- Opener: "We don't play chess anymore." then graph hook.
+- Robot section: dual-arm setup in one breath before hardware week.
+- Closer: `Week X of the summer robotics hosted by Robotics Nation. Blog in comments ♟️`

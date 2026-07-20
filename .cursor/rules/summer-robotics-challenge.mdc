@@ -1,0 +1,24 @@
+---
+description: Summer Robotics Challenge series conventions (LinkedIn + blog)
+globs: social/linkedin/week-*.md,blog/summer-robotics-week-*.html,blog/collections/summer-robotics-challenge.html
+alwaysApply: false
+---
+
+# Summer Robotics Challenge
+
+## LinkedIn closers
+
+End every Summer Robotics Challenge LinkedIn post with this line (swap week number):
+
+```
+Week X of the summer robotics hosted by Robotics Nation. Blog in comments ♟️
+```
+
+- Use "Blog in comments" (not "Writeup in comments" or "Full writeup in comments").
+- One emoji at the end (♟️ for chess-heavy weeks; 🤖 acceptable for hardware-heavy weeks if it fits).
+- Blog link goes in the first comment, not the post body.
+
+## Reference
+
+- Week 2 posted opener: "We don't play chess anymore."
+- Week 1 closer pattern was informal; from week 2 onward use the Robotics Nation line above.
