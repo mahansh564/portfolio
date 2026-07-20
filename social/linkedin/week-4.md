@@ -26,5 +26,6 @@ Week 4 of the summer robotics hosted by Robotics Nation. Blog in comments ♟️
 
 - Opener: "my robot was hallucinating." — bold three-word hook, then unpack the phantom-pieces problem.
 - Lead with the depth insight (measure height, not appearance) and the 64/64 payoff. No calibration archaeology, no device/jargon detail.
-- Vacation skip demoted to a parenthetical instead of the opener.
+- "for days" (not weeks) — matches the real timeline.
+- Vacation skip + week 2 gripper folded into one parenthetical instead of the opener.
 - Closer: `Week X of the summer robotics hosted by Robotics Nation. Blog in comments ♟️`
