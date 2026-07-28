@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 5: Ditch the Headset | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 5 of the Summer Robotics Challenge: ditch shaky VR teleop for leader–follower, get go-to-A5 working, keep training grasp, and talk to people off the record."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-5"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-5"
+    />
+    <meta
+      property="og:title"
+      content="Week 5: Ditch the Headset | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 5: leader–follower instead of VR, go to A5 works, grasp training in progress, quiet conversations I am not ready to name."
+    />
+    <meta property="article:published_time" content="2026-07-28" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 5: Ditch the Headset",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-07-28",
+        "description": "Week 5 of the Summer Robotics Challenge: ditch shaky VR teleop for leader–follower, get go-to-A5 working, keep training grasp, and talk to people off the record.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-5",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 5
+        </p>
+        <h1>ditch the headset</h1>
+        <div class="post-meta">
+          <span class="post-date">28 jul 2026</span>
+          <span class="post-reading-time">5 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 5</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <p>
+          Week 4 left me with a board I could trust and an arm I still couldn't
+          move cleanly. VR teleop still shook every trajectory I tried to
+          record. I poked at sensitivity and smoothing on the Quest for another
+          stretch, then quit.
+        </p>
+
+        <p>
+          The headset was costing evenings. I needed those evenings for the
+          bench.
+        </p>
+
+        <h2>follow the other arm</h2>
+
+        <p>
+          Switched to leader–follower. Grab one arm, move it by hand. The other
+          copies the joints.
+        </p>
+
+        <p>
+          Should have done this earlier. Leader is the arm I drag around.
+          Follower is the one that has to play chess later. No headset, no
+          floating controllers. Just two arms and a cable between them, more or
+          less.
+        </p>
+
+        <h2>go to a5</h2>
+
+        <p>
+          Demo for the week: tell it to go to A5 and watch whether it does.
+        </p>
+
+        <p>
+          Two weeks ago that request would have failed for three different
+          reasons. The board scan was still lying, VR was too shaky to trust,
+          and square names were just labels on a picture. This week the week-4
+          localisation and the follower finally line up. A5 is a pose. The arm
+          gets there.
+        </p>
+
+        <p>
+          No pick or place yet. The arm does show up where I asked, though.
+        </p>
+
+        <h2>grasp, almost</h2>
+
+        <p>
+          Same week I kept training grasp. Better than last week. Not good
+          enough to call done. I keep recording another episode and promising
+          myself the next one is the last.
+        </p>
+
+        <p>
+          So: go-to works. Grasp doesn't, yet. I'll take the half win.
+        </p>
+
+        <h2>side channel</h2>
+
+        <p>
+          Also talking to people who might care about this when it isn't a chess
+          robot on a lab table. Not going into it here. Too early, and I don't
+          want to jinx whatever it turns into.
+        </p>
+
+        <p>
+          Some of this summer stays off the blog until there's something
+          concrete to say.
+        </p>
+
+        <h2>what I took from it</h2>
+
+        <p>
+          Week 4 was seeing. Week 5 was admitting the Quest was the wrong tool
+          for recording moves. Leader–follower is ugly and simple and it
+          actually tracks.
+        </p>
+
+        <p>
+          Named squares work as targets now. Grasp is still the open problem.
+          And there's a second thread running next to the robot that I'm not
+          ready to write about.
+        </p>
+
+        <p>
+          Next: get grasp reliable, chain go-to into pick-and-place, keep the
+          other conversations offline until they earn a post.
+        </p>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a href="summer-robotics-week-4.html" class="week-nav-link week-nav-prev"
+            >← week 4</a
+          >
+        </nav>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
