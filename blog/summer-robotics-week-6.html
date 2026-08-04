@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Week 6: E2 to E4 | Anshul Mahajan</title>
+    <meta
+      name="description"
+      content="Week 6 of the Summer Robotics Challenge: first e2→e4 grab on a near-empty board, wrist cam for accuracy, grab-and-drop on leader–follower, full board still next."
+    />
+    <meta name="author" content="Anshul Mahajan" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://anshulmaha.com/blog/summer-robotics-week-6"
+    />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content="https://anshulmaha.com/blog/summer-robotics-week-6"
+    />
+    <meta
+      property="og:title"
+      content="Week 6: E2 to E4 | Anshul Mahajan"
+    />
+    <meta
+      property="og:description"
+      content="Week 6: first e2→e4 grab with one piece on the board, wrist cam for accuracy, full board still unfinished."
+    />
+    <meta property="article:published_time" content="2026-08-04" />
+    <meta property="article:author" content="Anshul Mahajan" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="../styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Week 6: E2 to E4",
+        "author": {
+          "@type": "Person",
+          "name": "Anshul Mahajan",
+          "url": "https://anshulmaha.com"
+        },
+        "datePublished": "2026-08-04",
+        "description": "Week 6 of the Summer Robotics Challenge: first e2→e4 grab on a near-empty board, wrist cam for accuracy, grab-and-drop on leader–follower, full board still next.",
+        "url": "https://anshulmaha.com/blog/summer-robotics-week-6",
+        "isPartOf": {
+          "@type": "CollectionPage",
+          "name": "Summer Robotics Challenge",
+          "url": "https://anshulmaha.com/blog/collections/summer-robotics-challenge"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="collections/summer-robotics-challenge.html" class="back-link"
+        >← summer robotics challenge</a
+      >
+
+      <header class="article-header">
+        <p class="collection-label">
+          <a href="collections/summer-robotics-challenge.html"
+            >summer robotics challenge</a
+          >
+          · week 6
+        </p>
+        <h1>e2 to e4</h1>
+        <div class="post-meta">
+          <span class="post-date">4 aug 2026</span>
+          <span class="post-reading-time">5 min read</span>
+          <span class="tag">robotics</span>
+          <span class="tag">week 6</span>
+        </div>
+      </header>
+
+      <aside class="series-note">
+        Part of my
+        <a href="collections/summer-robotics-challenge.html"
+          >Summer Robotics Challenge</a
+        >
+        build log: twelve weeks building embodied AI on the XLerobot, hosted by
+        <a
+          href="https://www.roboticsnation.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Robotics Nation</a
+        >.
+      </aside>
+
+      <article class="article">
+        <p>
+          e2 to e4. The pawn moved.
+        </p>
+
+        <p>
+          First grab that counted. Week 5 could reach a square. This week the
+          arm picks and places. One catch: there was only one piece on the board
+          when I ran it. A full board still needs work.
+        </p>
+
+        <h2>first grab</h2>
+
+        <p>
+          Pick from e2. Drop on e4. It works. Still not fully accurate on the
+          square, but the piece leaves and lands. Close enough that I stopped
+          treating grasp as the blocker.
+        </p>
+
+        <p>
+          That run was on an almost empty board. One pawn, nothing crowding the
+          path, nothing next door to clip. Real chess is crowded. Neighboring
+          pieces, tighter clearances, more ways to knock something over. I have
+          not shown the same grab there yet.
+        </p>
+
+        <p>
+          I started with head-cam trained movement. Got the arm in the
+          neighborhood. Then switched toward the wrist cam when I needed
+          accuracy. Head cam finds the square. Wrist cam sees the piece. That
+          swap is why the empty-board grab finally stuck.
+        </p>
+
+        <h2>grab and drop</h2>
+
+        <p>
+          Grab and drop training is done and works well on leader–follower.
+          Same setup I switched to last week. Glad I ditched the headset before
+          this part. No Quest tremor baked into the episodes.
+        </p>
+
+        <p>
+          The demos I trust so far are still the clean ones: sparse board,
+          simple pick, simple place. Next batch needs occupied boards, or I'll
+          just be teaching it a version of the game that only exists in demos.
+        </p>
+
+        <h2>still off the record</h2>
+
+        <p>
+          Ordered parts for a use case that isn't chess. Talked to more people
+          who might care about that version. Still not naming anyone or anything
+          here. Too early.
+        </p>
+
+        <h2>what I took from it</h2>
+
+        <p>
+          Two weeks ago I could see the board. Last week the arm could go to a
+          named square. This week it picks a pawn and puts it down, at least
+          when the board is empty enough to be nice about it.
+        </p>
+
+        <p>
+          Square centering still bothers me. So does the full-board case. Wrist
+          cam is the fix I'm chasing for both.
+        </p>
+
+        <p>
+          Next: train and test with more pieces on the board, cleaner landings,
+          more wrist-cam episodes. Keep the other thread quiet until the parts
+          arrive.
+        </p>
+
+        <nav class="week-nav" aria-label="Series navigation">
+          <a href="summer-robotics-week-5.html" class="week-nav-link week-nav-prev"
+            >← week 5</a
+          >
+        </nav>
+      </article>
+
+      <footer class="article-footer">
+        <p>
+          <a href="collections/summer-robotics-challenge.html"
+            >more from this series</a
+          >
+          ·
+          <a href="mailto:mahajan.anshul04@gmail.com">email me</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
